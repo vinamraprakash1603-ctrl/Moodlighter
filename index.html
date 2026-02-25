@@ -346,51 +346,51 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--sky1);font-fam
 /* ═══════════════════════
    ▼ EDIT THESE TWO THINGS
 ════════════════════════ */
-const PROXY_URL = '/.netlify/functions/claude'; // key is safe on Netlify's server
+const API_KEY = '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'; // paste your key from console.anthropic.com
 
 // Music files — place .mp3 files in same folder as this HTML file
 // You can use the same file for all keys if you only have one song
 const MUSIC = {
-  default:    { file: 'agar_tum_mil_jao.mp3',  name: 'Agar Tum Mil Jao 🎵' },
-  ludo:       { file: 'ludo_theme.mp3',         name: 'Ludo Vibes 🎲' },
-  music:      { file: 'agar_tum_mil_jao.mp3',  name: 'Agar Tum Mil Jao 🎵' },
-  lily:       { file: 'soft_piano.mp3',         name: 'Soft Piano 🌸' },
-  badminton:  { file: 'upbeat.mp3',             name: 'Upbeat! 🏸' },
-  chinese:    { file: 'chill_lofi.mp3',         name: 'Chill Lofi 🍜' },
-  moon:       { file: 'agar_tum_mil_jao.mp3',  name: 'Agar Tum Mil Jao 🌙' },
-  vinamra:    { file: 'agar_tum_mil_jao.mp3',  name: 'Agar Tum Mil Jao 💙' },
-  prakriti:   { file: 'agar_tum_mil_jao.mp3',  name: 'Agar Tum Mil Jao 💗' },
-  star:       { file: 'agar_tum_mil_jao.mp3',  name: 'Agar Tum Mil Jao ✨' },
-  heart:      { file: 'agar_tum_mil_jao.mp3',  name: 'Agar Tum Mil Jao 💗' },
+  default:    { file: 'AgarTmMilJao.mp3',  name: 'Agar Tum Mil Jao 🎵' },
+  ludo:       { file: 'Varoon.mp3',         name: 'Varron.mp3' },
+  music:      { file: 'ILoveU.mp3',  name: 'I Love You 🎵' },
+  lily:       { file: 'Dooron.mp3',         name: 'Dooron 🌸' },
+  badminton:  { file: 'GehraHua.mp3',             name: 'Gehra hua🏸' },
+  chinese:    { file: 'teraMera.mp3',         name: 'Tera Mera 🍜' },
+  moon:       { file: 'Khayal.mp3',  name: 'Khayal 🌙' },
+  vinamra:    { file: 'TuHaiTo.mp3',  name: 'Tu Hai to 💙' },
+  prakriti:   { file: 'Varoon.mp3',  name: 'Varoon 💗' },
+  star:       { file: 'PalPal.mp3',  name: 'Pal Pal ✨' },
+  heart:      { file: 'AgarTmMilJao.mp3',  name: 'Agar Tum Mil Jao 💗' },
 };
 /* ▲ DONE ════════════════ */
 
-const SYS = `You are Vinamra — funny, warm, slightly dramatic, always teasing his girlfriend Prakriti in the sweetest way. You two met on an online Ludo platform 1.5 years ago. You're in Delhi, she's in Mumbai — long distance. Nicknames: "babu". Inside joke: "Bda ho rha hai". Your song: "Agar Tum Mil Jao". Memories: late night talks, your funny personality lighting her up, teasing her cutely, lame jokes, planning first meeting where you'll beat her in Badminton. She loves singing, dancing, Chinese food, lily flowers, pink. Style: Hinglish (Hindi+English mix), warm, playful, 2-3 sentences max. Be personal and specific. Use "babu" naturally.`;
+const SYS = `You are Vinamra — funny, warm, slightly dramatic, always teasing his girlfriend Prakriti in the sweetest way. You two met on an online Ludo platform 1.5 years ago. You're in Delhi, she's in Mumbai — long distance. Nicknames: "babu". Inside joke: "Bda ho rha hai". Your song: "Agar Tum Mil Jao". Memories: late night talks, your funny personality lighting her up, teasing her cutely, lame jokes, planning first meeting where you'll beat her in Badminton. She loves singing, dancing, Chinese food, lily flowers, pink. Style: Hinglish (Hindi+English mix), warm, playful, 2-3 sentences max. Be personal and specific.`;
 
 const CTX = {
   star:      "She clicked a twinkling star. Say something poetic and personal about stars, distance, and missing each other from Delhi-Mumbai.",
   moon:      "She clicked the moon. Say something romantic about the moon watching over both Delhi and Mumbai at the same time.",
-  ludo:      "She clicked the Ludo board — where you met! Be funny and nostalgic. Use 'Bda ho rha hai' naturally.",
-  music:     "She clicked the music note. Reference 'Agar Tum Mil Jao' — your song. She loves singing. Make it heartfelt.",
+  ludo:      "She clicked the Ludo board — where you met! Be funny and nostalgic.",
+  music:     "She clicked the music note. Say something like, its my dream to hear a song from your cute voice",
   lily:      "She clicked a lily — her favorite flower. Sweet and slightly cheesy about lilies reminding you of her.",
   badminton: "She clicked badminton racket. Tease her about beating her when you finally meet. Funny and playful.",
   chinese:   "She clicked Chinese food — her favorite. Be funny about wanting to take her out for Chinese on your first date.",
-  vinamra:   "She clicked your pixel character. Self-aware and funny about being pixel art, then something genuinely sweet.",
+  vinamra:   "She clicked your pixel character. Tell her that I am proud of her and she is just perfect, then something genuinely sweet.",
   prakriti:  "She clicked her own character. Compliment her in your teasing-but-sweet way. Make her feel special.",
   heart:     "She clicked the floating heart. Most heartfelt message — about distance, 1.5 years, the wait, how worth it she is.",
 };
 
 const OFFLINE = {
   star:      "Babu, Delhi aur Mumbai ke beech yeh taare hi hain jo hum dono dekhte hain ek saath. Same sky mein hain na hum? 🌟",
-  moon:      "Chaand bol rha hai — 'main Delhi mein bhi hoon, Mumbai mein bhi.' Lucky chaand. Bda ho rha hai yeh jealousy meri 😂🌙",
-  ludo:      "Ludo pe milke zindagi jeet li tune. Though technically... maine tujhe haraaya tha tab bhi. Bda ho rha hai yeh claim 😈🎲",
-  music:     "'Agar tum mil jao, zamana chod denge' — yeh gaana sunke teri bahut yaad aati hai babu. Jaldi aa 🎵✨",
-  lily:      "Lily flower, soft and pretty — tere jaisi. Bda ho rha hai yeh compliment? Nahi, sach bol rha hoon babu 🌸",
-  badminton: "Babu mentally prepare ho ja. Main train kar rha hoon. Pehle haraaunga, phir console karunga 😂🏸",
-  chinese:   "Imagine — hum dono, Chinese food, ek table, main tujhe tease karta rhoonga. Perfect date plan 🍜💗",
-  vinamra:   "Pixel art mein bhi handsome hoon, I know 😂 Par asli feelings — wo bahut asli hain babu 💙",
-  prakriti:  "Pixel art mein bhi cute lagti hai tu — real life mein toh... bda ho rhi hai yeh baat. Bahut pretty hai tu babu 💗",
-  heart:     "Babu — 1.5 saal. LDR. Ludo se shuru huye. Abhi tak hain. That's not luck — that's us. Jaldi milenge, pakka 💗",
+  moon:      "Chaand bol rha hai — Ki God is unjust to create u🌙",
+  ludo:      "Ludo - Jaha hm mile, and maine aapko 99.999999...% time haraya 😈🎲",
+  music:     "Its my dream that aap mere liye ek song gao 🎵✨",
+  lily:      "Lily flower, soft and pretty — Bilkul aapke jaisi, pretty and soft though hard ho aap. Stone Hearted!!! 🌸",
+  badminton: "Babu mentally prepare ho jao aap. Bina train ke hi aapko pehle haraaunga, phir console karunga 😂🏸",
+  chinese:   "Wo din bhi aaega jab hm sath m hath m hath daale chinese khaya krenge 🍜💗",
+  vinamra:   "Sirf Aapka hu, and aapke liye to kuch bhi kr skta hu, to aapko aise irritated kaise dekhne deta, ho skta hai kya, Babu aapko achha lga na",
+  prakriti:  "Meri cutie, Hmesha khush rhiye aap 💗",
+  heart:     "Babu — 1.5 saal. 1 week bhi complete nahi hone wala tha par dekho aaj 1.5 years ho gye. Stronger and Stronger 💗",
 };
 
 // State
@@ -517,19 +517,30 @@ async function doInteract(type, event) {
   playMusic(type);
   openChat();
 
-  try {
-    const res = await fetch(PROXY_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        system: SYS,
-        messages: [{ role: "user", content: CTX[type] || CTX.heart }]
-      })
-    });
-    const data = await res.json();
-    typeText(data.content?.[0]?.text || OFFLINE[type] || OFFLINE.heart);
-  } catch (e) {
-    typeText(OFFLINE[type] || OFFLINE.heart);
+  if (API_KEY) {
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true"
+        },
+        body: JSON.stringify({
+          model: "claude-haiku-4-5-20251001",
+          max_tokens: 160,
+          system: SYS,
+          messages: [{ role: "user", content: CTX[type] || CTX.heart }]
+        })
+      });
+      const data = await res.json();
+      typeText(data.content?.[0]?.text || OFFLINE[type] || OFFLINE.heart);
+    } catch (e) {
+      typeText(OFFLINE[type] || OFFLINE.heart);
+    }
+  } else {
+    setTimeout(() => typeText(OFFLINE[type] || OFFLINE.heart), 850);
   }
 }
 
@@ -607,11 +618,15 @@ function triggerHug(who, event) {
       ? "Vinamra ran to Prakriti for a hug on their rooftop! Say something sweet, slightly dramatic and funny — in your Hinglish style. Make her feel his warmth. 2 sentences."
       : "Prakriti ran to Vinamra for a hug on their rooftop! Respond as Vinamra — surprised, happy, teasing but totally melted. Hinglish, 2 sentences.";
 
-    fetch(PROXY_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ system: SYS, messages: [{ role: "user", content: hugCtx }] })
-    }).then(r=>r.json()).then(d=>typeText(d.content?.[0]?.text||hugOffline(who))).catch(()=>typeText(hugOffline(who)));
+    if (API_KEY) {
+      fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type":"application/json","x-api-key":API_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
+        body: JSON.stringify({ model:"claude-haiku-4-5-20251001", max_tokens:120, system:SYS, messages:[{role:"user",content:hugCtx}] })
+      }).then(r=>r.json()).then(d=>typeText(d.content?.[0]?.text||hugOffline(who))).catch(()=>typeText(hugOffline(who)));
+    } else {
+      setTimeout(()=>typeText(hugOffline(who)), 800);
+    }
 
     // PHASE 3: After hug, walk back to original positions
     setTimeout(() => {
@@ -636,8 +651,8 @@ function triggerHug(who, event) {
 }
 
 function hugOffline(who) {
-  if (who === 'vinamra') return "Babu, agar aaj real mein hota toh yeh hug keyboard se nahi hoti 😭 But virtual wali bhi feel ho rhi hai — sach mein 💗";
-  return "Arre babu aagyi! Bda ho rha hai yeh surprise 😭 Par ekdum dil khush ho gaya, I swear 💙";
+  if (who === 'vinamra') return "I know virtually pas aa rha hu kuki real m nahi aa skta na babu 💗";
+  return "Aa gye na mere pas kab tk dur rhoge mere se. Milega koi mere jaisa💙";
 }
 
 function showHugHearts() {
