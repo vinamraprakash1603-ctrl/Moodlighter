@@ -29,7 +29,7 @@ const CONFIG = {
   days: [
     {
       day:        1,
-      unlocksAt:  "2026-05-03T00:08:00",
+      unlocksAt:  "2026-05-04T14:00:00",
       teaserMsg:  "Jaan, abhi nhi kholte, wait kr lijiye 💗",
       images:     ["0101.jpg"],
       voices:     ["voice.mp3"],
