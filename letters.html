@@ -295,10 +295,12 @@ function fmt(str) {
 function dayStatus(unlocksAt) {
   const now = new Date();
   const unlock = parseDate(unlocksAt);
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const unlockDay  = new Date(unlock.getFullYear(), unlock.getMonth(), unlock.getDate());
-  if (unlockDay.getTime() === todayStart.getTime()) return 'today';
-  if (unlock <= now) return 'open';
+  if (now >= unlock) {
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const unlockDay  = new Date(unlock.getFullYear(), unlock.getMonth(), unlock.getDate());
+    if (unlockDay.getTime() === todayStart.getTime()) return 'today';
+    return 'open';
+  }
   return 'locked';
 }
 
