@@ -31,7 +31,7 @@ const CONFIG = {
       day:        1,
       unlocksAt:  "2025-05-04T14:00:00",
       teaserMsg:  "Jaan, abhi nhi kholte, wait kr lijiye 💗",
-      images:     ["note.jpg"],
+      images:     ["0101.jpg"],
       voices:     ["voice.mp3"],
     },
     {
