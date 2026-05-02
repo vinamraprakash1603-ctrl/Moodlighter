@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Letters 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink:      #ff6eb4;
+  --pink-s:    #ffb3d9;
+  --pink-g:    rgba(255,110,180,0.25);
+  --purple:    #8b3dc8;
+  --bg:        #04000e;
+  --bg2:       #0a0120;
+  --white:     #f0d8ff;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  width:100%; min-height:100%; background:var(--bg);
+  font-family:'DM Sans', sans-serif;
+  color:var(--white);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── STARS ── */
+#starfield { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+#starfield::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 20% 25%, rgba(140,60,200,.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(255,80,160,.1) 0%, transparent 45%);
+}
+.star {
+  position:absolute; border-radius:50%; background:#fff;
+  animation: twinkle var(--d,2s) ease-in-out infinite alternate;
+  animation-delay: var(--dl,0s);
+}
+@keyframes twinkle {
+  from { opacity:.08; transform:scale(.6); }
+  to   { opacity:.8;  transform:scale(1.3); }
+}
+
+/* ── SCAN LINES ── */
+#scan {
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);
+  opacity:.4;
+}
+
+/* ── LAYOUT ── */
+#app { position:relative; z-index:2; min-height:100vh; padding-bottom:env(safe-area-inset-bottom,24px); }
+
+/* ── HEADER ── */
+header {
+  text-align:center;
+  padding: calc(env(safe-area-inset-top,20px) + 24px) 24px 20px;
+}
+.eyebrow {
+  font-size:9px; letter-spacing:3px; color:rgba(255,110,180,.45);
+  margin-bottom:10px; font-weight:300;
+}
+.h-title {
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic; font-size:30px; font-weight:300;
+  color:var(--white); line-height:1.2;
+}
+.h-title em { color:var(--pink); font-style:italic; }
+.h-sub { font-size:11px; color:rgba(255,179,217,.35); margin-top:5px; letter-spacing:1px; }
+.h-divider {
+  width:50px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--pink),transparent);
+  margin:14px auto;
+}
+
+/* ── PROGRESS ── */
+.prog-row {
+  display:flex; align-items:center; gap:10px;
+  justify-content:center; margin:0 0 18px;
+}
+.pbar { width:110px; height:2px; background:rgba(255,110,180,.12); border-radius:99px; overflow:hidden; }
+.pfill { height:100%; background:linear-gradient(90deg,var(--purple),var(--pink)); border-radius:99px; transition:width 1.2s ease; }
+.ptxt { font-size:9px; color:rgba(255,179,217,.35); letter-spacing:1px; }
+
+/* ── SECTION LABEL ── */
+.section-lbl {
+  font-size:7px; letter-spacing:3px; color:rgba(255,179,217,.22);
+  padding:14px 18px 6px; font-weight:400;
+}
+
+/* ── CARDS ── */
+.cards { padding:0 14px; display:flex; flex-direction:column; gap:10px; }
+
+/* base */
+.card {
+  border-radius:18px; position:relative; overflow:hidden;
+  animation: cardIn .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(20px) scale(.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ── PAST / TODAY UNLOCKED ── */
+.card-open {
+  background: rgba(255,110,180,.04);
+  border: 1px solid rgba(255,110,180,.28);
+  padding: 14px 14px 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.card-open:active { transform:scale(.98); }
+.card-open.is-today { border-color:var(--pink); background:rgba(255,110,180,.07); }
+
+.pulse-ring {
+  position:absolute; inset:-1px; border-radius:19px;
+  border:1.5px solid rgba(255,110,180,.45);
+  animation:pulse 2.2s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes pulse {
+  0%   { opacity:.8; transform:scale(1); }
+  100% { opacity:0;  transform:scale(1.04); }
+}
+
+.day-col { display:flex; flex-direction:column; align-items:center; min-width:36px; gap:1px; }
+.day-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:30px; font-weight:300; line-height:1;
+  color:rgba(240,216,255,.5);
+}
+.card-open.is-today .day-num { color:var(--pink); }
+.day-lbl { font-size:6px; letter-spacing:2px; color:rgba(255,179,217,.35); }
+
+/* thumbnails */
+.thumbs { display:flex; gap:5px; flex-shrink:0; }
+.thumb {
+  width:44px; height:44px; border-radius:8px;
+  background:linear-gradient(135deg,rgba(255,110,180,.18),rgba(140,60,200,.14));
+  border:1px solid rgba(255,110,180,.2);
+  overflow:hidden; position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.thumb img { width:100%; height:100%; object-fit:cover; }
+.thumb-more {
+  font-size:10px; color:rgba(255,179,217,.5); font-weight:300;
+}
+
+.card-meta { flex:1; min-width:0; }
+.card-date { font-size:10px; color:rgba(255,255,255,.4); margin-bottom:4px; }
+.card-badges { display:flex; gap:4px; flex-wrap:wrap; }
+.badge {
+  font-size:7px; padding:2px 7px; border-radius:99px; letter-spacing:.5px;
+}
+.badge-img { background:rgba(255,110,180,.12); color:rgba(255,179,217,.75); border:1px solid rgba(255,110,180,.22); }
+.badge-voice { background:rgba(140,60,200,.15); color:rgba(190,140,255,.8); border:1px solid rgba(140,60,200,.28); }
+
+.today-pill {
+  font-size:7px; background:var(--pink); color:#04000e;
+  padding:2px 8px; border-radius:99px;
+  letter-spacing:2px; font-weight:500; margin-bottom:4px;
+  display:inline-block;
+}
+.chevron { font-size:16px; color:rgba(255,110,180,.35); flex-shrink:0; }
+.card-open.is-today .chevron { color:rgba(255,110,180,.7); }
+
+/* ── LOCKED FUTURE ── */
+.card-locked {
+  background:rgba(0,0,0,.18);
+  border:1px solid rgba(255,110,180,.09);
+  padding:14px 14px 14px 16px;
+  display:flex; align-items:center; gap:12px;
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease;
+}
+.card-locked:active { background:rgba(255,110,180,.04); }
+.card-locked .day-num { color:rgba(255,255,255,.07); }
+.card-locked .day-lbl { color:rgba(255,179,217,.15); }
+.lock-info { flex:1; }
+.lock-title { font-size:11px; color:rgba(255,255,255,.2); margin-bottom:3px; }
+.lock-date  { font-size:9px;  color:rgba(255,179,217,.2); letter-spacing:.5px; }
+.lock-icon {
+  width:26px; height:30px; position:relative; flex-shrink:0;
+  transition:transform .18s ease;
+}
+.card-locked:active .lock-icon { transform:rotate(-8deg); }
+.li-shackle {
+  width:14px; height:14px;
+  border:1.5px solid rgba(255,110,180,.22);
+  border-bottom:none; border-radius:7px 7px 0 0;
+  position:absolute; top:0; left:6px;
+}
+.li-body {
+  width:26px; height:16px;
+  background:rgba(255,110,180,.06);
+  border:1.5px solid rgba(255,110,180,.2);
+  border-radius:4px; position:absolute; bottom:0;
+}
+
+/* ── SHOOTING STARS ── */
+.shoot {
+  position:fixed; width:2px; height:2px;
+  background:white; border-radius:50%;
+  pointer-events:none; z-index:0;
+  animation:shoot 1.1s ease-out forwards;
+}
+.shoot::after {
+  content:'';
+  position:absolute; top:0; right:0;
+  width:70px; height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,.6),transparent);
+  transform:translateX(100%);
+}
+@keyframes shoot {
+  0%   { transform:translateX(0)translateY(0); opacity:1; }
+  100% { transform:translateX(260px)translateY(180px); opacity:0; }
+}
+
+/* ── BOTTOM QUOTE ── */
+.bottom-quote {
+  text-align:center;
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic; font-size:13px;
+  color:rgba(255,179,217,.2);
+  padding:28px 30px calc(env(safe-area-inset-bottom,0px) + 20px);
+  line-height:1.8;
+}
+</style>
+</head>
+<body>
+
+<div id="starfield"></div>
+<div id="scan"></div>
+
+<div id="app">
+  <header>
+    <div class="eyebrow" id="eyebrow-text">✦ from vinamra, with love ✦</div>
+    <div class="h-title">Letters for <em id="recipient-name">Prakriti</em></div>
+    <div class="h-sub">a little something, every day</div>
+    <div class="h-divider"></div>
+    <div class="prog-row">
+      <span class="ptxt" id="prog-left">— opened</span>
+      <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+      <span class="ptxt" id="prog-right">— total</span>
+    </div>
+  </header>
+
+  <div id="card-list"></div>
+
+  <div class="bottom-quote" id="bottom-quote">"every day, a little piece of my heart" 💗</div>
+</div>
+
+<script src="config.js"></script>
+<script>
+// ── STARS ──────────────────────────────────────────────────────
+(function() {
+  const f = document.getElementById('starfield');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 2.2 + 0.6;
+    const col = Math.random() > .8 ? 'rgba(255,179,217,.9)' : '#fff';
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;background:${col};--d:${1.4+Math.random()*3.5}s;--dl:${Math.random()*5}s`;
+    f.appendChild(s);
+  }
+})();
+
+// ── SHOOTING STARS ─────────────────────────────────────────────
+setInterval(() => {
+  if (Math.random() > .55) return;
+  const s = document.createElement('div'); s.className = 'shoot';
+  s.style.cssText = `top:${5+Math.random()*35}%;left:${5+Math.random()*40}%`;
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 1200);
+}, 4000);
+
+// ── HELPERS ────────────────────────────────────────────────────
+function parseDate(str) { return new Date(str); }
+
+function fmt(str) {
+  const d = parseDate(str);
+  return d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function dayStatus(unlocksAt) {
+  const now = new Date();
+  const unlock = parseDate(unlocksAt);
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const unlockDay  = new Date(unlock.getFullYear(), unlock.getMonth(), unlock.getDate());
+  if (unlockDay.getTime() === todayStart.getTime()) return 'today';
+  if (unlock <= now) return 'open';
+  return 'locked';
+}
+
+// ── BUILD CARDS ────────────────────────────────────────────────
+function buildCards() {
+  const list = document.getElementById('card-list');
+  list.innerHTML = '';
+
+  document.getElementById('recipient-name').textContent = CONFIG.recipientName;
+  document.getElementById('eyebrow-text').textContent = `✦ from ${CONFIG.senderName}, with love ✦`;
+
+  const days = CONFIG.days;
+  let openCount = 0;
+
+  // sections
+  const sections = { past:[], today:[], locked:[] };
+  days.forEach(d => {
+    const s = dayStatus(d.unlocksAt);
+    if (s === 'today') { sections.today.push(d); openCount++; }
+    else if (s === 'open') { sections.past.push(d); openCount++; }
+    else sections.locked.push(d);
+  });
+
+  // progress
+  document.getElementById('prog-left').textContent = `${openCount} opened`;
+  document.getElementById('prog-right').textContent = `${days.length} total`;
+  document.getElementById('pfill').style.width = `${Math.round(openCount/days.length*100)}%`;
+
+  let delay = 0;
+
+  function addSection(label, arr, status) {
+    if (!arr.length) return;
+    const lbl = document.createElement('div');
+    lbl.className = 'section-lbl';
+    lbl.textContent = label;
+    list.appendChild(lbl);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'cards';
+    arr.forEach(d => {
+      const el = makeCard(d, status, delay);
+      wrap.appendChild(el);
+      delay += 60;
+    });
+    list.appendChild(wrap);
+  }
+
+  addSection('PAST', sections.past, 'open');
+  addSection('TODAY', sections.today, 'today');
+  addSection('COMING SOON', sections.locked, 'locked');
+}
+
+function makeCard(d, status, delay) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.animationDelay = delay + 'ms';
+
+  if (status === 'locked') {
+    card.innerHTML = `
+      <div class="card-locked">
+        <div class="day-col">
+          <div class="day-num">${String(d.day).padStart(2,'0')}</div>
+          <div class="day-lbl">DAY</div>
+        </div>
+        <div class="lock-info">
+          <div class="lock-title">something's waiting...</div>
+          <div class="lock-date">opens ${fmt(d.unlocksAt)}</div>
+        </div>
+        <div class="lock-icon">
+          <div class="li-shackle"></div>
+          <div class="li-body"></div>
+        </div>
+      </div>`;
+    card.querySelector('.card-locked').addEventListener('click', () => {
+      goTeaser(d);
+    });
+  } else {
+    const isToday = status === 'today';
+    const folder = `assets/day${String(d.day).padStart(2,'0')}/`;
+
+    // build thumbnails (max 3 shown)
+    const showThumbs = d.images.slice(0,3);
+    let thumbsHtml = showThumbs.map((img,i) => {
+      if (i === 2 && d.images.length > 3) {
+        return `<div class="thumb thumb-more">+${d.images.length-2}</div>`;
+      }
+      return `<div class="thumb"><img src="${folder}${img}" onerror="this.parentNode.style.background='linear-gradient(135deg,rgba(255,110,180,.18),rgba(140,60,200,.14))';this.remove()" loading="lazy"></div>`;
+    }).join('');
+
+    let badgesHtml = '';
+    if (d.images.length) badgesHtml += `<span class="badge badge-img">${d.images.length} photo${d.images.length>1?'s':''}</span>`;
+    if (d.voices.length) badgesHtml += `<span class="badge badge-voice">${d.voices.length} voice${d.voices.length>1?'s':''}</span>`;
+
+    const metaTop = isToday
+      ? `<div class="today-pill">TODAY</div>`
+      : `<div class="card-date">${fmt(d.unlocksAt)}</div>`;
+
+    card.innerHTML = `
+      <div class="card-open ${isToday ? 'is-today' : ''}">
+        ${isToday ? '<div class="pulse-ring"></div>' : ''}
+        <div class="day-col">
+          <div class="day-num">${String(d.day).padStart(2,'0')}</div>
+          <div class="day-lbl">DAY</div>
+        </div>
+        <div class="thumbs">${thumbsHtml}</div>
+        <div class="card-meta">
+          ${metaTop}
+          <div class="card-badges">${badgesHtml}</div>
+        </div>
+        <div class="chevron">›</div>
+      </div>`;
+
+    card.querySelector('.card-open').addEventListener('click', () => {
+      goLetter(d.day);
+    });
+  }
+
+  return card;
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────
+function goLetter(dayNum) {
+  window.location.href = `letter.html?day=${dayNum}`;
+}
+
+function goTeaser(d) {
+  // store teaser data and go to teaser page
+  sessionStorage.setItem('teaser', JSON.stringify({
+    day: d.day,
+    msg: d.teaserMsg,
+    unlocksAt: d.unlocksAt,
+  }));
+  window.location.href = 'teaser.html';
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+buildCards();
+</script>
+</body>
+</html>
