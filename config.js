@@ -36,9 +36,9 @@ const CONFIG = {
     },
     {
       day:        2,
-      unlocksAt:  "2026-05-05T00:00:00",
+      unlocksAt:  "2025-05-05T00:00:00",
       teaserMsg:  "Hii Babu, Abhi time nahi hua hai na open krne ka, Have Patience my baby. 🌸",
-      images:     ["note.jpg", "memory.jpg"],
+      images:     ["0201.jpg", "0202.jpg"],
       voices:     [],
     },
     {
